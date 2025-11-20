@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Prayer Times</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a5e63, #0d2e36);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        
+        .current-time {
+            font-size: 18px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .countdown-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+        }
+        
+        .countdown-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#4CAF50 0%, #2E7D32 0%, rgba(255, 255, 255, 0.1) 0%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+            transition: background 1s ease;
+        }
+        
+        .countdown-circle::before {
+            content: '';
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            background: #1a5e63;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .countdown-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .countdown-content .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        
+        .countdown-content .time {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .countdown-content .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .prayer-status {
+            font-size: 20px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .prayer-times {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .prayer-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .prayer-card.active {
+            background: rgba(76, 175, 80, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .prayer-card.current {
+            background: rgba(255, 152, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+        
+        .prayer-name {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .prayer-time {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #4CAF50;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .retry-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        .retry-btn:hover {
+            background: #388E3C;
+        }
+        
+        .time-format {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .format-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .format-btn.active {
+            background: #4CAF50;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .countdown-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .countdown-content .time {
+                font-size: 26px;
+            }
+            
+            .prayer-times {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-mosque"></i> Islamic Prayer Times</h1>
+            <p>Real-time countdown to next prayer</p>
+        </div>
+        
+        <div class="current-time" id="currentTime">
+            Loading current time...
+        </div>
+        
+        <div id="appContent">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Getting your location and prayer times...</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Prayer times calculated based on your location</p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let userLocation = null;
+        let prayerTimes = null;
+        let timeFormat = '12'; // Default to 12-hour format
+        
+        // DOM elements
+        const appContent = document.getElementById('appContent');
+        const loadingElement = document.getElementById('loading');
+        const currentTimeElement = document.getElementById('currentTime');
+        
+        // Initialize the app
+        function initApp() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            // Get user location
+            getUserLocation();
+        }
+        
+        // Get user's current location
+        function getUserLocation() {
+            if (!navigator.geolocation) {
+                showError("Geolocation is not supported by your browser");
+                return;
+            }
+            
+            loadingElement.innerHTML = `
+                <div class="spinner"></div>
+                <p>Getting your location...</p>
+            `;
+            
+            navigator.geolocation.getCurrentPosition(
+                // Success callback
+                (position) => {
+                    userLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    
+                    // Get prayer times based on location
+                    getPrayerTimes();
+                },
+                // Error callback
+                (error) => {
+                    let errorMessage = "Unable to retrieve your location";
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = "Location access denied. Please enable location services.";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = "Location information is unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = "Location request timed out.";
+                            break;
+                    }
+                    
+                    showError(errorMessage);
+                },
+                // Options
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        }
+        
+        // Get prayer times based on location
+        function getPrayerTimes() {
+            loadingElement.innerHTML = `
+                <div class="spinner"></div>
+                <p>Calculating prayer times for your location...</p>
+            `;
+            
+            // In a real app, you would call an API like https://api.aladhan.com/v1/timings
+            // For this demo, we'll simulate API call with setTimeout
+            setTimeout(() => {
+                // Simulate prayer times calculation based on location
+                prayerTimes = calculatePrayerTimes(userLocation);
+                
+                // Display the app content
+                displayAppContent();
+                
+                // Start countdown updates
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }, 1500);
+        }
+        
+        // Convert 24-hour time to 12-hour format with AM/PM
+        function to12HourFormat(time24) {
+            const [hours, minutes] = time24.split(':').map(Number);
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const hours12 = hours % 12 || 12;
+            return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+        }
+        
+        // Calculate prayer times based on location (simplified)
+        function calculatePrayerTimes(location) {
+            const now = new Date();
+            
+            // Prayer times in 24-hour format with durations (in minutes)
+            const prayerTimes24 = [
+                { name: "Fajr", time: "05:30", duration: 30, icon: "🌅" },
+                { name: "Sunrise", time: "06:45", duration: 0, icon: "☀️" },
+                { name: "Dhuhr", time: "12:30", duration: 40, icon: "🕌" },
+                { name: "Asr", time: "15:45", duration: 40, icon: "🕌" },
+                { name: "Maghrib", time: "18:20", duration: 15, icon: "🌇" },
+                { name: "Isha", time: "19:45", duration: 45, icon: "🌙" }
+            ];
+            
+            const prayers = prayerTimes24.map(prayer => {
+                const [hours, minutes] = prayer.time.split(':').map(Number);
+                let startTime = new Date();
+                startTime.setHours(hours, minutes, 0, 0);
+                
+                // Calculate end time based on duration
+                let endTime = new Date(startTime);
+                if (prayer.duration > 0) {
+                    endTime.setMinutes(endTime.getMinutes() + prayer.duration);
+                } else {
+                    // For sunrise, set end time to next prayer start
+                    const nextPrayerIndex = (prayerTimes24.indexOf(prayer) + 1) % prayerTimes24.length;
+                    const nextPrayer = prayerTimes24[nextPrayerIndex];
+                    const [nextHours, nextMinutes] = nextPrayer.time.split(':').map(Number);
+                    endTime = new Date();
+                    endTime.setHours(nextHours, nextMinutes, 0, 0);
+                }
+                
+                // If prayer time has passed, set it to tomorrow
+                if (endTime < now) {
+                    startTime.setDate(startTime.getDate() + 1);
+                    endTime.setDate(endTime.getDate() + 1);
+                } else if (startTime < now && endTime > now) {
+                    // Prayer is currently ongoing
+                }
+                
+                return {
+                    ...prayer,
+                    startTime: startTime,
+                    endTime: endTime,
+                    time12: to12HourFormat(prayer.time)
+                };
+            });
+            
+            return prayers;
+        }
+        
+        // Display the main app content
+        function displayAppContent() {
+            // Get location name (in a real app, you would reverse geocode the coordinates)
+            const locationName = getLocationName(userLocation);
+            
+            appContent.innerHTML = `
+                <div class="time-format">
+                    <button class="format-btn ${timeFormat === '12' ? 'active' : ''}" onclick="setTimeFormat('12')">12-Hour</button>
+                    <button class="format-btn ${timeFormat === '24' ? 'active' : ''}" onclick="setTimeFormat('24')">24-Hour</button>
+                </div>
+                
+                <div class="countdown-container">
+                    <div class="countdown-circle" id="countdownCircle">
+                        <div class="countdown-content">
+                            <div class="icon" id="prayerIcon">🕌</div>
+                            <div class="time" id="countdownTime">00:00:00</div>
+                            <div class="label" id="countdownLabel">Remaining</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prayer-status" id="prayerStatus">
+                    Loading prayer status...
+                </div>
+                
+                <div class="prayer-times" id="prayerTimes">
+                    <!-- Prayer times will be dynamically inserted here -->
+                </div>
+                
+                <div class="location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="locationText">${locationName}</span>
+                </div>
+            `;
+            
+            // Update prayer times display with current format
+            updatePrayerTimesDisplay();
+        }
+        
+        // Set time format (12-hour or 24-hour)
+        function setTimeFormat(format) {
+            timeFormat = format;
+            
+            // Update format buttons
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update prayer times display
+            updatePrayerTimesDisplay();
+            
+            // Update prayer status display
+            updatePrayerStatusDisplay();
+        }
+        
+        // Get location name based on coordinates (simplified)
+        function getLocationName(location) {
+            // In a real app, you would use a reverse geocoding service
+            // For demo, we'll return a generic location based on coordinates
+            if (location.latitude > 40) return "New York, USA";
+            if (location.latitude > 20) return "Cairo, Egypt";
+            if (location.latitude > 0) return "Jakarta, Indonesia";
+            if (location.latitude > -20) return "São Paulo, Brazil";
+            return "Melbourne, Australia";
+        }
+        
+        // Update current time
+        function updateCurrentTime() {
+            const now = new Date();
+            
+            if (timeFormat === '12') {
+                // 12-hour format with AM/PM
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                };
+                currentTimeElement.textContent = now.toLocaleDateString('en-US', options);
+            } else {
+                // 24-hour format
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                };
+                currentTimeElement.textContent = now.toLocaleDateString('en-US', options);
+            }
+        }
+        
+        // Update countdown
+        function updateCountdown() {
+            if (!prayerTimes) return;
+            
+            const now = new Date();
+            
+            // Find current and next prayer
+            let currentPrayer = null;
+            let nextPrayer = null;
+            
+            for (const prayer of prayerTimes) {
+                if (now >= prayer.startTime && now < prayer.endTime) {
+                    currentPrayer = prayer;
+                } else if (prayer.startTime > now && (!nextPrayer || prayer.startTime < nextPrayer.startTime)) {
+                    nextPrayer = prayer;
+                }
+            }
+            
+            // If no current prayer, find the next prayer
+            if (!currentPrayer && !nextPrayer) {
+                nextPrayer = prayerTimes[0];
+            }
+            
+            let targetTime, countdownType, displayPrayer;
+            
+            if (currentPrayer) {
+                // Countdown to end of current prayer
+                targetTime = currentPrayer.endTime;
+                countdownType = 'end';
+                displayPrayer = currentPrayer;
+            } else {
+                // Countdown to start of next prayer
+                targetTime = nextPrayer.startTime;
+                countdownType = 'start';
+                displayPrayer = nextPrayer;
+            }
+            
+            // Calculate time difference
+            const diff = targetTime - now;
+            
+            if (diff < 0) {
+                // Time has passed, refresh calculation
+                prayerTimes = calculatePrayerTimes(userLocation);
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Format time for display
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update countdown display
+            document.getElementById('countdownTime').textContent = timeString;
+            document.getElementById('prayerIcon').textContent = displayPrayer.icon;
+            
+            // Update prayer status display
+            updatePrayerStatusDisplay(currentPrayer, nextPrayer, countdownType);
+            
+            // Update circular progress
+            let progress;
+            if (countdownType === 'start') {
+                const totalTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                progress = ((totalTime - diff) / totalTime) * 100;
+            } else {
+                const prayerDuration = displayPrayer.endTime - displayPrayer.startTime;
+                const elapsed = now - displayPrayer.startTime;
+                progress = (elapsed / prayerDuration) * 100;
+            }
+            
+            document.getElementById('countdownCircle').style.background = 
+                `conic-gradient(#4CAF50 ${progress}%, #2E7D32 ${progress}%, rgba(255, 255, 255, 0.1) ${progress}%)`;
+            
+            // Update prayer times display
+            updatePrayerTimesDisplay(currentPrayer ? currentPrayer.name : '');
+        }
+        
+        // Update prayer status display
+        function updatePrayerStatusDisplay(currentPrayer, nextPrayer, countdownType) {
+            if (!prayerTimes) return;
+            
+            const prayerStatusElement = document.getElementById('prayerStatus');
+            
+            if (currentPrayer) {
+                const displayTime = timeFormat === '12' ? currentPrayer.time12 : currentPrayer.time;
+                prayerStatusElement.innerHTML = `
+                    <div>
+                        <strong>${currentPrayer.name} Prayer Ongoing</strong><br>
+                        <small>Ends in ${countdownType === 'end' ? document.getElementById('countdownTime').textContent : '00:00:00'}</small>
+                    </div>
+                `;
+            } else if (nextPrayer) {
+                const displayTime = timeFormat === '12' ? nextPrayer.time12 : nextPrayer.time;
+                prayerStatusElement.innerHTML = `
+                    <div>
+                        <strong>Next: ${nextPrayer.name} Prayer</strong><br>
+                        <small>Starts in ${countdownType === 'start' ? document.getElementById('countdownTime').textContent : '00:00:00'} at ${displayTime}</small>
+                    </div>
+                `;
+            }
+        }
+        
+        // Update prayer times display
+        function updatePrayerTimesDisplay(currentPrayerName = '') {
+            if (!prayerTimes) return;
+            
+            const container = document.getElementById('prayerTimes');
+            container.innerHTML = '';
+            
+            prayerTimes.forEach(prayer => {
+                const isCurrent = prayer.name === currentPrayerName;
+                const displayTime = timeFormat === '12' ? prayer.time12 : prayer.time;
+                
+                const card = document.createElement('div');
+                card.className = `prayer-card ${isCurrent ? 'current' : ''}`;
+                card.innerHTML = `
+                    <div class="prayer-name">${prayer.icon} ${prayer.name}</div>
+                    <div class="prayer-time">${displayTime}</div>
+                    ${prayer.duration > 0 ? `<small>${prayer.duration} min</small>` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // Show error message
+        function showError(message) {
+            appContent.innerHTML = `
+                <div class="error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <p>${message}</p>
+                        <button class="retry-btn" onclick="getUserLocation()">Try Again</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Start the app when the page loads
+        window.onload = initApp;
+    </script>
+</body>
+</html>
