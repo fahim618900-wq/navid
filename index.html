@@ -6,264 +6,222 @@
 <title>ইসলামিক নামাজের সময়</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-* {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-body {background:linear-gradient(135deg,#1a5e63,#0d2e36); color:#fff; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px;}
-.container {max-width:500px; width:100%; background: rgba(255,255,255,0.1); backdrop-filter:blur(10px); border-radius:20px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.3); text-align:center;}
-.header h1 {font-size:28px; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px;}
-.header p {opacity:0.8; font-size:16px;}
-.current-time {font-size:18px; margin-bottom:20px; background: rgba(255,255,255,0.1); padding:10px 20px; border-radius:50px; display:inline-block;}
-.countdown-container {position:relative; width:250px; height:250px; margin:0 auto 30px;}
-.countdown-circle {width:100%; height:100%; border-radius:50%; background: conic-gradient(#4CAF50 0%, #2E7D32 0%, rgba(255,255,255,0.1) 0%); display:flex; justify-content:center; align-items:center; position:relative; box-shadow:0 0 20px rgba(76,175,80,0.3); transition: background 1s ease;}
-.countdown-circle::before {content:''; position:absolute; width:85%; height:85%; background:#1a5e63; border-radius:50%; z-index:1;}
-.countdown-content {position:relative; z-index:2; text-align:center;}
-.countdown-content .icon {font-size:40px; margin-bottom:10px; color:#4CAF50;}
-.countdown-content .time {font-size:32px; font-weight:bold; margin-bottom:5px; letter-spacing:1px;}
-.countdown-content .label {font-size:14px; opacity:0.8;}
-.prayer-status {font-size:20px; margin-bottom:30px; background: rgba(255,255,255,0.1); padding:12px 20px; border-radius:10px; min-height:60px; display:flex; align-items:center; justify-content:center;}
-.prayer-times {display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-bottom:30px;}
-.prayer-card {background: rgba(255,255,255,0.1); padding:15px; border-radius:10px; transition:all 0.3s ease;}
-.prayer-card.active {background: rgba(76,175,80,0.2); transform:scale(1.05); box-shadow:0 5px 15px rgba(76,175,80,0.3);}
-.prayer-card.current {background: rgba(255,152,0,0.2); transform:scale(1.05); box-shadow:0 5px 15px rgba(255,152,0,0.3);}
-.prayer-name {font-size:16px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px;}
-.prayer-time {font-size:18px; font-weight:bold;}
-.location {display:flex; align-items:center; justify-content:center; gap:10px; margin-top:20px; padding:10px; background: rgba(255,255,255,0.1); border-radius:10px;}
-.footer {margin-top:20px; font-size:14px; opacity:0.7;}
-.loading {display:flex; flex-direction:column; align-items:center; justify-content:center; gap:15px; padding:20px;}
-.spinner {width:40px; height:40px; border:4px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#4CAF50; animation:spin 1s linear infinite;}
-@keyframes spin {to{transform:rotate(360deg);}}
-.error {background: rgba(244,67,54,0.2); padding:15px; border-radius:10px; margin:20px 0; display:flex; align-items:center; justify-content:center; gap:10px;}
-.retry-btn {background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:50px; cursor:pointer; font-size:16px; margin-top:10px; transition:background 0.3s;}
-.retry-btn:hover {background:#388E3C;}
-.time-format {display:flex; justify-content:center; gap:10px; margin:15px 0;}
-.format-btn {background: rgba(255,255,255,0.1); border:none; color:white; padding:8px 15px; border-radius:20px; cursor:pointer; transition:all 0.3s;}
-.format-btn.active {background:#4CAF50;}
-@media (max-width:480px){.container{padding:20px;}.countdown-container{width:200px;height:200px;}.countdown-content .time{font-size:26px;}.prayer-times{grid-template-columns:1fr;}}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}
+body{background:linear-gradient(135deg,#1a5e63,#0d2e36);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;}
+.container{max-width:500px;width:100%;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);text-align:center;}
+.header{margin-bottom:30px;}
+.header h1{font-size:28px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.header p{opacity:0.8;font-size:16px;}
+.current-time{font-size:18px;margin-bottom:20px;background:rgba(255,255,255,0.1);padding:10px 20px;border-radius:50px;display:inline-block;}
+.countdown-container{position:relative;width:250px;height:250px;margin:0 auto 30px;}
+.countdown-circle{width:100%;height:100%;border-radius:50%;background:conic-gradient(#4CAF50 0%,#2E7D32 0%,rgba(255,255,255,0.1) 0%);display:flex;justify-content:center;align-items:center;position:relative;box-shadow:0 0 20px rgba(76,175,80,0.3);transition:background 1s ease;}
+.countdown-circle::before{content:'';position:absolute;width:85%;height:85%;background:#1a5e63;border-radius:50%;z-index:1;}
+.countdown-content{position:relative;z-index:2;text-align:center;}
+.countdown-content .icon{font-size:40px;margin-bottom:10px;color:#4CAF50;}
+.countdown-content .time{font-size:32px;font-weight:bold;margin-bottom:5px;letter-spacing:1px;}
+.countdown-content .label{font-size:14px;opacity:0.8;}
+.prayer-status{font-size:20px;margin-bottom:30px;background:rgba(255,255,255,0.1);padding:12px 20px;border-radius:10px;min-height:60px;display:flex;align-items:center;justify-content:center;}
+.prayer-times{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:30px;}
+.prayer-card{background:rgba(255,255,255,0.1);padding:15px;border-radius:10px;transition:all 0.3s ease;}
+.prayer-card.current{background:rgba(255,152,0,0.2);transform:scale(1.05);box-shadow:0 5px 15px rgba(255,152,0,0.3);}
+.prayer-name{font-size:16px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.prayer-time{font-size:18px;font-weight:bold;}
+.location{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;padding:10px;background:rgba(255,255,255,0.1);border-radius:10px;}
+.footer{margin-top:20px;font-size:14px;opacity:0.7;}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:20px;}
+.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#4CAF50;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.error{background:rgba(244,67,54,0.2);padding:15px;border-radius:10px;margin:20px 0;display:flex;align-items:center;justify-content:center;gap:10px;}
+.retry-btn{background:#4CAF50;color:white;border:none;padding:10px 20px;border-radius:50px;cursor:pointer;font-size:16px;margin-top:10px;transition:background 0.3s;}
+.retry-btn:hover{background:#388E3C;}
+.time-format{display:flex;justify-content:center;gap:10px;margin:15px 0;}
+.format-btn{background:rgba(255,255,255,0.1);border:none;color:white;padding:8px 15px;border-radius:20px;cursor:pointer;transition:all 0.3s;}
+.format-btn.active{background:#4CAF50;}
+@media(max-width:480px){.container{padding:20px;}.countdown-container{width:200px;height:200px;}.countdown-content .time{font-size:26px;}.prayer-times{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <div class="container">
 <div class="header">
-<h1><i class="fas fa-mosque"></i> ইসলামিক নামাজের সময়</h1>
-<p>পরবর্তী নামাজের জন্য রিয়েল-টাইম কাউন্টডাউন</p>
+<h1><i class="fas fa-mosque"></i> ইসলামী নামাজের সময়</h1>
+<p>পরবর্তী নামাজের রিয়েল টাইম কাউন্টডাউন</p>
 </div>
-<div class="current-time" id="currentTime">Loading current time...</div>
+<div class="current-time" id="currentTime">লোড হচ্ছে...</div>
 <div id="appContent">
 <div class="loading" id="loading">
 <div class="spinner"></div>
-<p>আপনার অবস্থান এবং নামাজের সময় পাওয়া হচ্ছে...</p>
+<p>আপনার অবস্থান এবং নামাজের সময় বের করা হচ্ছে...</p>
 </div>
 </div>
-<div class="footer"><p>নামাজের সময় আপনার অবস্থান অনুযায়ী গণনা করা হয়েছে</p></div>
+<div class="footer">
+<p>নামাজের সময় আপনার অবস্থান অনুযায়ী হিসাব করা হয়েছে</p>
+</div>
 </div>
 
 <script>
+// Bangladesh Locations
+const bangladeshLocations = {
+  "Dhaka": { "Dhaka Sadar": ["Shahbagh","Ramna","Dhanmondi"], "Savar":["Savar Sadar","Aminbazar"], "Dhamrai":["Dhamrai Sadar","Nandaghat"], "Keraniganj":["Keraniganj Sadar","Kalatia"], "Gazipur":["Gazipur Sadar","Tongi"], "Narsingdi":["Narsingdi Sadar","Palash"], "Tangail":["Tangail Sadar","Basail"], "Manikganj":["Manikganj Sadar","Shibalaya"] },
+  "Chattogram": { "Chattogram Sadar":["Pahartali","Panchlaish"], "Fatikchhari":["Fatikchhari Sadar","Harulalchhari"], "Cox's Bazar":["Cox's Bazar Sadar","Chakaria"] },
+  "Khulna": { "Khulna Sadar":["Harintana","Labanchara"], "Dacope":["Dacope Sadar","Koyra"], "Batiaghata":["Batiaghata"] },
+  "Rajshahi": { "Rajshahi Sadar":["Boalia","Paba"], "Bagha":["Bagha Sadar"] },
+  "Barishal": { "Barishal Sadar":["Bandar","Kawnia"], "Bhola":["Bhola Sadar","Char Fasson"], "Jhalokathi":["Jhalokathi Sadar","Nalchiti"], "Patuakhali":["Patuakhali Sadar","Dumki"], "Pirojpur":["Pirojpur Sadar","Bhandaria"] },
+  "Sylhet": { "Sylhet Sadar":["Tilagarh","Subidbazar"], "Beanibazar":["Beanibazar Sadar","Madhabpur"], "Golapganj":["Golapganj"] },
+  "Mymensingh": { "Mymensingh Sadar":["Mymensingh Sadar","Trishal","Phulpur"], "Muktagachha":["Muktagachha Sadar","Haluaghat"] },
+  "Rangpur": { "Rangpur Sadar":["Kacharibari","Kaunia"], "Dinajpur":["Dinajpur Sadar"] },
+  "Comilla": { "Cumilla Sadar":["Cumilla Sadar","Meghna"], "Barura":["Barura","Brahmanpara"], "Daudkandi":["Daudkandi"] }
+  // অন্যান্য জেলা ও উপজেলা এখানে প্রয়োজনে যোগ করা যাবে
+};
+
 // Global variables
 let userLocation = null;
 let prayerTimes = null;
-let timeFormat = '12'; // default 12-hour
-let lastLocation = null;
-
-// DOM elements
+let timeFormat = '12'; 
 const appContent = document.getElementById('appContent');
 const loadingElement = document.getElementById('loading');
 const currentTimeElement = document.getElementById('currentTime');
 
-// Bangladesh divisions & districts (সহজ উদাহরণ)
-const bangladeshLocations = {
-  "Dhaka": ["Savar","Dhamrai","Keraniganj","Narsingdi","Gazipur","Narsinghpur"],
-  "Chattogram": ["Chattogram Sadar","Fatikchhari","Anwara"],
-  "Rajshahi": ["Paba","Bagha","Puthia"],
-  "Khulna": ["Terokhada","Dacope"],
-  // add more divisions and districts if needed
-};
-
-// Initialize app
-function initApp(){
-    updateCurrentTime();
-    setInterval(updateCurrentTime,1000);
-    getUserLocation();
+// Initialize
+function initApp() {
+  updateCurrentTime();
+  setInterval(updateCurrentTime,1000);
+  getUserLocation();
 }
 
 // Get user location
-function getUserLocation(){
-    if(!navigator.geolocation){
-        showError("আপনার ব্রাউজারে জিওলোকেশন সাপোর্ট নেই");
-        return;
-    }
-    loadingElement.innerHTML=`<div class="spinner"></div><p>আপনার অবস্থান নেওয়া হচ্ছে...</p>`;
-    navigator.geolocation.getCurrentPosition((pos)=>{
-        userLocation = {latitude:pos.coords.latitude, longitude:pos.coords.longitude};
-        lastLocation = userLocation;
-        getPrayerTimes();
-    },(err)=>{
-        if(lastLocation){
-            userLocation = lastLocation;
-            getPrayerTimes();
-        } else {
-            showError("অবস্থান পাওয়া যায়নি। দয়া করে অবস্থান চালু করুন।");
-        }
-    }, {enableHighAccuracy:true, timeout:10000, maximumAge:60000});
+function getUserLocation() {
+  if(!navigator.geolocation){ showError("আপনার ব্রাউজার জিওলোকেশন সমর্থন করছে না"); return; }
+  loadingElement.innerHTML=`<div class="spinner"></div><p>আপনার অবস্থান বের করা হচ্ছে...</p>`;
+  navigator.geolocation.getCurrentPosition((pos)=>{
+    userLocation={latitude:pos.coords.latitude,longitude:pos.coords.longitude};
+    getPrayerTimes();
+  },(err)=>{
+    let msg="আপনার অবস্থান নির্ধারণ করা যায়নি";
+    if(err.code===err.PERMISSION_DENIED) msg="অবস্থান অ্যাক্সেস বাতিল হয়েছে। লোকেেশন চালু করুন।";
+    showError(msg);
+  },{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
 }
 
-// Calculate prayer times (dummy example)
-function calculatePrayerTimes(location){
-    const now = new Date();
-    const prayers24 = [
-        {name:"ফজর",time:"05:30",duration:30,icon:"🌅"},
-        {name:"সূর্যদ্বয়",time:"06:45",duration:0,icon:"☀️"},
-        {name:"যোহর",time:"12:30",duration:40,icon:"🕌"},
-        {name:"আছর",time:"15:45",duration:40,icon:"🕌"},
-        {name:"মাগরীব",time:"18:20",duration:15,icon:"🌇"},
-        {name:"এশা",time:"19:45",duration:45,icon:"🌙"}
-    ];
-    return prayers24.map(p=>{
-        const [h,m]=p.time.split(":").map(Number);
-        let startTime=new Date(); startTime.setHours(h,m,0,0);
-        let endTime = new Date(startTime);
-        if(p.duration>0) endTime.setMinutes(endTime.getMinutes()+p.duration);
-        if(endTime<now){startTime.setDate(startTime.getDate()+1); endTime.setDate(endTime.getDate()+1);}
-        return {...p,startTime,endTime,time12:to12HourFormat(p.time)};
-    });
-}
-
-function to12HourFormat(t){
-    const [h,m]=t.split(":").map(Number);
-    const period = h>=12?'PM':'AM';
-    const hh = h%12||12;
-    return `${hh}:${m.toString().padStart(2,'0')} ${period}`;
-}
-
-// Get prayer times
+// Dummy prayer times calculation
 function getPrayerTimes(){
-    loadingElement.innerHTML=`<div class="spinner"></div><p>আপনার অবস্থান অনুযায়ী নামাজের সময় গণনা হচ্ছে...</p>`;
-    setTimeout(()=>{
-        prayerTimes = calculatePrayerTimes(userLocation);
-        displayAppContent();
-        updateCountdown();
-        setInterval(updateCountdown,1000);
-    },1000);
+  loadingElement.innerHTML=`<div class="spinner"></div><p>আপনার অবস্থানের জন্য নামাজের সময় বের করা হচ্ছে...</p>`;
+  setTimeout(()=>{
+    prayerTimes = calculatePrayerTimes(userLocation);
+    displayAppContent();
+    updateCountdown();
+    setInterval(updateCountdown,1000);
+  },1000);
 }
 
-// Display main app
-function displayAppContent(){
-    const locationText = getLocationName(userLocation);
-    appContent.innerHTML=`
-    <div class="time-format">
-        <button class="format-btn ${timeFormat==='12'?'active':''}" onclick="setTimeFormat('12')">12-ঘণ্টা</button>
-        <button class="format-btn ${timeFormat==='24'?'active':''}" onclick="setTimeFormat('24')">24-ঘণ্টা</button>
-    </div>
-    <div class="countdown-container">
-        <div class="countdown-circle" id="countdownCircle">
-            <div class="countdown-content">
-                <div class="icon" id="prayerIcon">🕌</div>
-                <div class="time" id="countdownTime">00:00:00</div>
-                <div class="label" id="countdownLabel">অবশিষ্ট</div>
-            </div>
-        </div>
-    </div>
-    <div class="prayer-status" id="prayerStatus">Loading prayer status...</div>
-    <div class="prayer-times" id="prayerTimes"></div>
-    <div class="location"><i class="fas fa-map-marker-alt"></i> <span id="locationText">${locationText}</span></div>
-    `;
-    updatePrayerTimesDisplay();
+// Simplified prayer times
+function calculatePrayerTimes(loc){
+  const now = new Date();
+  const prayers24=[{name:"Fajr",time:"05:30",duration:30,icon:"🌅"},
+                   {name:"Sunrise",time:"06:45",duration:0,icon:"☀️"},
+                   {name:"Dhuhr",time:"12:30",duration:40,icon:"🕌"},
+                   {name:"Asr",time:"15:45",duration:40,icon:"🕌"},
+                   {name:"Maghrib",time:"18:20",duration:15,icon:"🌇"},
+                   {name:"Isha",time:"19:45",duration:45,icon:"🌙"}];
+  return prayers24.map(p=>{
+    const [h,m]=p.time.split(":").map(Number);
+    let start=new Date(); start.setHours(h,m,0,0);
+    let end=new Date(start); end.setMinutes(end.getMinutes()+p.duration);
+    if(end<now){start.setDate(start.getDate()+1);end.setDate(end.getDate()+1);}
+    return {...p,startTime:start,endTime:end,time12:to12HourFormat(p.time)};
+  });
 }
+
+// Time format conversion
+function to12HourFormat(time24){const [h,m]=time24.split(":").map(Number);const period=h>=12?"PM":"AM";const hh=h%12||12;return`${hh}:${m.toString().padStart(2,"0")} ${period}`;}
+
+// Display content
+function displayAppContent(){
+  const locationName=getLocationName(userLocation);
+  appContent.innerHTML=`
+  <div class="time-format">
+    <button class="format-btn ${timeFormat==='12'?'active':''}" onclick="setTimeFormat('12',event)">12-ঘন্টা</button>
+    <button class="format-btn ${timeFormat==='24'?'active':''}" onclick="setTimeFormat('24',event)">24-ঘন্টা</button>
+  </div>
+  <div class="countdown-container">
+    <div class="countdown-circle" id="countdownCircle">
+      <div class="countdown-content">
+        <div class="icon" id="prayerIcon">🕌</div>
+        <div class="time" id="countdownTime">00:00:00</div>
+        <div class="label" id="countdownLabel">অবশিষ্ট</div>
+      </div>
+    </div>
+  </div>
+  <div class="prayer-status" id="prayerStatus">লোড হচ্ছে...</div>
+  <div class="prayer-times" id="prayerTimes"></div>
+  <div class="location"><i class="fas fa-map-marker-alt"></i><span id="locationText">${locationName}</span></div>`;
+  updatePrayerTimesDisplay();
+}
+
+// Set time format
+function setTimeFormat(f,event){timeFormat=f;document.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');updatePrayerTimesDisplay();updatePrayerStatusDisplay();}
 
 // Get location name
 function getLocationName(loc){
-    if(!loc) return "অজানা";
-    // Bangladesh check
-    if(loc.latitude>20 && loc.latitude<27 && loc.longitude>88 && loc.longitude<93){
-        // Random district for demo
-        return "অবস্থান: ঢাকা, সাভার";
-    } else {
-        return "অবস্থান: অজানা শহর, অজানা দেশ";
-    }
+  let lat=loc.latitude;
+  let long=loc.longitude;
+  // Simple check: Bangladesh approx lat/lon 20-27 N, 88-92 E
+  if(lat>=20 && lat<=27 && long>=88 && long<=92){
+    // For demo: Mymensingh Sadar
+    return "অবস্থান: Mymensingh, Phulpur";
+  } else return "অবস্থান: বাইরে, অজানা দেশ";
 }
 
-// Countdown function
-function updateCountdown(){
-    if(!prayerTimes) return;
-    const now = new Date();
-    let currentPrayer=null, nextPrayer=null;
-    for(const p of prayerTimes){
-        if(now>=p.startTime && now<p.endTime) currentPrayer=p;
-        else if(now<p.startTime && (!nextPrayer||p.startTime<nextPrayer.startTime)) nextPrayer=p;
-    }
-    if(!currentPrayer && !nextPrayer) nextPrayer=prayerTimes[0];
-    let targetTime,countdownType,displayPrayer;
-    if(currentPrayer){targetTime=currentPrayer.endTime; countdownType='end'; displayPrayer=currentPrayer;}
-    else{targetTime=nextPrayer.startTime; countdownType='start'; displayPrayer=nextPrayer;}
-    const diff = targetTime-now;
-    const hours=Math.floor(diff/(1000*60*60));
-    const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
-    const seconds=Math.floor((diff%(1000*60))/1000);
-    const timeString=`${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-    document.getElementById('countdownTime').textContent=timeString;
-    document.getElementById('prayerIcon').textContent=displayPrayer.icon;
-    // progress
-    let progress;
-    if(countdownType==='start'){const totalTime=24*60*60*1000; progress=((totalTime-diff)/totalTime)*100;}
-    else{const duration=displayPrayer.endTime-displayPrayer.startTime; const elapsed=now-displayPrayer.startTime; progress=(elapsed/duration)*100;}
-    document.getElementById('countdownCircle').style.background=`conic-gradient(#4CAF50 ${progress}%, #2E7D32 ${progress}%, rgba(255,255,255,0.1) ${progress}%)`;
-    updatePrayerStatusDisplay(currentPrayer,nextPrayer,countdownType);
-    updatePrayerTimesDisplay(currentPrayer?currentPrayer.name:'');
-}
-
-// Prayer status
-function updatePrayerStatusDisplay(currentPrayer,nextPrayer,countdownType){
-    if(!prayerTimes) return;
-    const el=document.getElementById('prayerStatus');
-    if(currentPrayer){
-        const t = timeFormat==='12'?currentPrayer.time12:currentPrayer.time;
-        el.innerHTML=`<div><strong>${currentPrayer.name} চলমান</strong><br><small>শেষ হবে ${document.getElementById('countdownTime').textContent}</small></div>`;
-    } else if(nextPrayer){
-        const t = timeFormat==='12'?nextPrayer.time12:nextPrayer.time;
-        el.innerHTML=`<div><strong>পরবর্তী: ${nextPrayer.name}</strong><br><small>শুরু হবে ${document.getElementById('countdownTime').textContent} এ ${t}</small></div>`;
-    }
-}
-
-// Update prayer cards
-function updatePrayerTimesDisplay(currentPrayerName=''){
-    if(!prayerTimes) return;
-    const container=document.getElementById('prayerTimes');
-    container.innerHTML='';
-    prayerTimes.forEach(p=>{
-        const isCurrent=p.name===currentPrayerName;
-        const t=timeFormat==='12'?p.time12:p.time;
-        const card=document.createElement('div');
-        card.className=`prayer-card ${isCurrent?'current':''}`;
-        card.innerHTML=`<div class="prayer-name">${p.icon} ${p.name}</div><div class="prayer-time">${t}</div>${p.duration>0?`<small>${p.duration} মিনিট</small>`:''}`;
-        container.appendChild(card);
-    });
-}
-
-// Time format
-function setTimeFormat(f){
-    timeFormat=f;
-    document.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active'));
-    event.target.classList.add('active');
-    updatePrayerTimesDisplay();
-    updatePrayerStatusDisplay();
-}
-
-// Current time
+// Update current time
 function updateCurrentTime(){
-    const now=new Date();
-    if(timeFormat==='12'){
-        const opt={weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true};
-        currentTimeElement.textContent=now.toLocaleDateString('bn-BD',opt);
-    } else{
-        const opt={weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
-        currentTimeElement.textContent=now.toLocaleDateString('bn-BD',opt);
-    }
+  const now=new Date();
+  const opts={weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:timeFormat==='12'};
+  currentTimeElement.textContent=now.toLocaleDateString('bn-BD',opts);
 }
 
-// Error
+// Update countdown
+function updateCountdown(){
+  if(!prayerTimes) return;
+  const now=new Date();
+  let current=null,next=null;
+  for(const p of prayerTimes){
+    if(now>=p.startTime && now<p.endTime) current=p;
+    else if(p.startTime>now && (!next||p.startTime<next.startTime)) next=p;
+  }
+  if(!current&&!next) next=prayerTimes[0];
+  let target,ctype,disp;
+  if(current){target=current.endTime;ctype='end';disp=current;}else{target=next.startTime;ctype='start';disp=next;}
+  const diff=target-now;if(diff<0){prayerTimes=calculatePrayerTimes(userLocation);return;}
+  const h=Math.floor(diff/(1000*60*60)),m=Math.floor((diff%(1000*60*60))/(1000*60)),s=Math.floor((diff%(1000*60))/1000);
+  const tstr=`${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+  document.getElementById('countdownTime').textContent=tstr;
+  document.getElementById('prayerIcon').textContent=disp.icon;
+  updatePrayerStatusDisplay(current,next,ctype);
+}
+
+// Update prayer status
+function updatePrayerStatusDisplay(current,next,ctype){
+  const el=document.getElementById('prayerStatus');
+  if(current){el.innerHTML=`<div><strong>${current.name} নামাজ চলছে</strong><br><small>শেষ হতে ${document.getElementById('countdownTime').textContent}</small></div>`;}
+  else if(next){el.innerHTML=`<div><strong>পরবর্তী: ${next.name} নামাজ</strong><br><small>শুরু হতে ${document.getElementById('countdownTime').textContent}</small></div>`;}
+  updatePrayerTimesDisplay(current?current.name:'');
+}
+
+// Update prayer times display
+function updatePrayerTimesDisplay(currName=''){
+  const container=document.getElementById('prayerTimes');if(!prayerTimes) return;container.innerHTML='';
+  prayerTimes.forEach(p=>{
+    const isCurr=p.name===currName;
+    const t=timeFormat==='12'?p.time12:p.time;
+    const card=document.createElement('div');card.className=`prayer-card ${isCurr?'current':''}`;
+    card.innerHTML=`<div class="prayer-name">${p.icon} ${p.name}</div><div class="prayer-time">${t}</div>${p.duration>0?`<small>${p.duration} মিনিট</small>`:''}`;
+    container.appendChild(card);
+  });
+}
+
+// Show error
 function showError(msg){appContent.innerHTML=`<div class="error"><i class="fas fa-exclamation-triangle"></i><div><p>${msg}</p><button class="retry-btn" onclick="getUserLocation()">আবার চেষ্টা করুন</button></div></div>`;}
 
-// Start app
 window.onload=initApp;
 </script>
 </body>
 </html>
-
