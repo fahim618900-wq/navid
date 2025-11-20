@@ -109,12 +109,12 @@ function getUserLocation(){
 function calculatePrayerTimes(location){
     const now = new Date();
     const prayers24 = [
-        {name:"Fajr",time:"05:30",duration:30,icon:"🌅"},
-        {name:"Sunrise",time:"06:45",duration:0,icon:"☀️"},
-        {name:"Dhuhr",time:"12:30",duration:40,icon:"🕌"},
-        {name:"Asr",time:"15:45",duration:40,icon:"🕌"},
-        {name:"Maghrib",time:"18:20",duration:15,icon:"🌇"},
-        {name:"Isha",time:"19:45",duration:45,icon:"🌙"}
+        {name:"ফজর",time:"05:30",duration:30,icon:"🌅"},
+        {name:"সূর্যদ্বয়",time:"06:45",duration:0,icon:"☀️"},
+        {name:"যোহর",time:"12:30",duration:40,icon:"🕌"},
+        {name:"আছর",time:"15:45",duration:40,icon:"🕌"},
+        {name:"মাগরীব",time:"18:20",duration:15,icon:"🌇"},
+        {name:"এশা",time:"19:45",duration:45,icon:"🌙"}
     ];
     return prayers24.map(p=>{
         const [h,m]=p.time.split(":").map(Number);
@@ -266,3 +266,4 @@ window.onload=initApp;
 </script>
 </body>
 </html>
+
