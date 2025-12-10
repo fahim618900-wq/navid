@@ -2,43 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini SVG Browser</title>
+<title>Mini Web Browser</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-    .toolbar {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-        background-color: #f1f1f1;
-        gap: 5px;
-    }
-    .toolbar input {
-        flex: 1;
-        padding: 5px;
-        font-size: 16px;
-    }
-    .toolbar button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        width: 30px;
-        height: 30px;
-        padding: 0;
-    }
-    iframe#browser {
-        width: 100%;
-        height: calc(100vh - 40px);
-        border: none;
-    }
-    svg {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
-        fill: #333;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.toolbar {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    gap: 5px;
+}
+.toolbar input {
+    flex: 1;
+    padding: 5px;
+    font-size: 16px;
+}
+.toolbar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    fill: #333;
+}
 </style>
 </head>
 <body>
@@ -60,42 +55,40 @@
     <button id="home" title="Home">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
     </button>
+    <button id="newtab" title="New Tab">
+        <svg viewBox="0 0 24 24"><path d="M19 3h-4v2h2.59L5 15.59 6.41 17 19 4.41V7h2V3zM5 19h14v2H5v-2z"/></svg>
+    </button>
 </div>
 
-<iframe id="browser" src="https://duckduckgo.com"></iframe>
-
 <script>
-const iframe = document.getElementById("browser");
 const urlInput = document.getElementById("url");
 
 document.getElementById("go").addEventListener("click", () => {
     let url = urlInput.value.trim();
     if (!url.startsWith("http")) url = "https://" + url;
-    iframe.src = url;
+    window.location.href = url;
 });
 
 document.getElementById("back").addEventListener("click", () => {
-    try { iframe.contentWindow.history.back(); } catch(e){}
+    history.back();
 });
 
 document.getElementById("forward").addEventListener("click", () => {
-    try { iframe.contentWindow.history.forward(); } catch(e){}
+    history.forward();
 });
 
 document.getElementById("reload").addEventListener("click", () => {
-    try { iframe.contentWindow.location.reload(); } catch(e){ iframe.src = iframe.src; }
+    location.reload();
 });
 
 document.getElementById("home").addEventListener("click", () => {
-    iframe.src = "https://duckduckgo.com";
+    window.location.href = "https://fahim618900-wq.github.io/navid/";
 });
 
-iframe.addEventListener("load", () => {
-    try {
-        urlInput.value = iframe.contentWindow.location.href;
-    } catch(e) {
-        urlInput.value = iframe.src;
-    }
+document.getElementById("newtab").addEventListener("click", () => {
+    let url = urlInput.value.trim() || "https://duckduckgo.com";
+    if (!url.startsWith("http")) url = "https://" + url;
+    window.open(url, "_blank");
 });
 </script>
 
