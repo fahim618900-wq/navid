@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini Browser (Working URL Open)</title>
+<title>Mini Browser with Search</title>
 <style>
 body {
     margin: 0;
@@ -54,15 +54,6 @@ svg {
 <body>
 
 <div class="toolbar">
-    <button id="back" title="Back">
-        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    </button>
-    <button id="forward" title="Forward">
-        <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-    </button>
-    <button id="reload" title="Reload">
-        <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.11-.3 2.15-.82 3.03l1.46 1.46C19.24 15.46 20 13.8 20 12c0-4.42-3.58-8-8-8zm-6.36.64L4.22 4.06C2.76 5.54 2 7.2 2 9c0 4.42 3.58 8 8 8v3l4-4-4-4v3c-3.31 0-6-2.69-6-6 0-1.11.3-2.15.82-3.03z"/></svg>
-    </button>
     <input type="text" id="url" placeholder="Type URL or search query">
     <button id="go" title="Go">
         <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg>
@@ -107,36 +98,32 @@ function switchTab(index) {
     urlInput.value = tabs[index].url;
 }
 
-// Update URL for active tab
-function updateActiveTabUrl(url) {
-    tabs[activeTab].url = url;
-    tabbar.children[activeTab].textContent = url.replace(/^https?:\/\//,"");
-}
-
-// Toolbar buttons
-document.getElementById("go").addEventListener("click", () => {
+// Open URL or search
+function openURL() {
     let input = urlInput.value.trim();
-    let url = input;
-    if (!input.startsWith("http")) {
+    let url;
+    if (!input) return;
+    if (input.startsWith("http://") || input.startsWith("https://")) {
+        url = input;
+    } else if (input.includes(".")) {
+        url = "https://" + input;
+    } else {
         // treat as search query
         url = "https://duckduckgo.com/?q=" + encodeURIComponent(input);
     }
-    updateActiveTabUrl(url);
+    tabs[activeTab].url = url;
+    tabbar.children[activeTab].textContent = url.replace(/^https?:\/\//,"");
     window.open(url, "_blank");
-});
+}
 
-urlInput.addEventListener("keypress", (e) => {
-    if(e.key === "Enter") {
-        document.getElementById("go").click();
-    }
-});
+// Event listeners
+document.getElementById("go").addEventListener("click", openURL);
+urlInput.addEventListener("keypress", (e) => { if(e.key === "Enter") openURL(); });
 
-document.getElementById("back").addEventListener("click", () => { alert("Use browser back button"); });
-document.getElementById("forward").addEventListener("click", () => { alert("Use browser forward button"); });
-document.getElementById("reload").addEventListener("click", () => { location.reload(); });
 document.getElementById("home").addEventListener("click", () => {
-    let url = "https://fahim618900-wq.github.io/navid/";
-    updateActiveTabUrl(url);
+    const url = "https://fahim618900-wq.github.io/navid/";
+    tabs[activeTab].url = url;
+    tabbar.children[activeTab].textContent = "Home";
     window.open(url, "_blank");
 });
 document.getElementById("newtab").addEventListener("click", () => createTab());
