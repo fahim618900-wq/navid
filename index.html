@@ -2,135 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini Browser with Search</title>
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
-.toolbar {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background-color: #f1f1f1;
-    gap: 5px;
-}
-.toolbar input {
-    flex: 1;
-    padding: 5px;
-    font-size: 16px;
-}
-.toolbar button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-}
-.tabs {
-    display: flex;
-    background-color: #ddd;
-    border-bottom: 1px solid #aaa;
-}
-.tab {
-    padding: 5px 10px;
-    cursor: pointer;
-    user-select: none;
-    border-right: 1px solid #aaa;
-}
-.tab.active {
-    background-color: #fff;
-    font-weight: bold;
-}
-svg {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    fill: #333;
-}
-</style>
+<title>Mini Mobile Browser</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="toolbar">
-    <input type="text" id="url" placeholder="Type URL or search query">
-    <button id="go" title="Go">
-        <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg>
+    <button id="back" class="btn">
+        <img src="icons/back.svg">
     </button>
-    <button id="home" title="Home">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+
+    <button id="forward" class="btn">
+        <img src="icons/forward.svg">
     </button>
-    <button id="newtab" title="New Tab">
-        <svg viewBox="0 0 24 24"><path d="M19 3h-4v2h2.59L5 15.59 6.41 17 19 4.41V7h2V3zM5 19h14v2H5v-2z"/></svg>
+
+    <button id="reload" class="btn">
+        <img src="icons/reload.svg">
+    </button>
+
+    <input id="url" placeholder="Search or type URL">
+
+    <button id="go" class="btn">
+        <img src="icons/go.svg">
+    </button>
+
+    <button id="newtab" class="btn">
+        <img src="icons/newtab.svg">
     </button>
 </div>
 
 <div class="tabs" id="tabbar"></div>
 
-<script>
-const tabbar = document.getElementById("tabbar");
-const urlInput = document.getElementById("url");
-
-let tabs = [];
-let activeTab = 0;
-
-// Create a new tab object
-function createTab(url = "https://duckduckgo.com") {
-    const index = tabs.length;
-    tabs.push({ url });
-
-    const tabElement = document.createElement("div");
-    tabElement.className = "tab";
-    tabElement.textContent = "New Tab";
-    tabElement.onclick = () => switchTab(index);
-    tabbar.appendChild(tabElement);
-
-    switchTab(index);
-}
-
-// Switch active tab
-function switchTab(index) {
-    activeTab = index;
-    tabs.forEach((t,i) => {
-        tabbar.children[i].classList.toggle("active", i===index);
-    });
-    urlInput.value = tabs[index].url;
-}
-
-// Open URL or search
-function openURL() {
-    let input = urlInput.value.trim();
-    let url;
-    if (!input) return;
-    if (input.startsWith("http://") || input.startsWith("https://")) {
-        url = input;
-    } else if (input.includes(".")) {
-        url = "https://" + input;
-    } else {
-        // treat as search query
-        url = "https://duckduckgo.com/?q=" + encodeURIComponent(input);
-    }
-    tabs[activeTab].url = url;
-    tabbar.children[activeTab].textContent = url.replace(/^https?:\/\//,"");
-    window.open(url, "_blank");
-}
-
-// Event listeners
-document.getElementById("go").addEventListener("click", openURL);
-urlInput.addEventListener("keypress", (e) => { if(e.key === "Enter") openURL(); });
-
-document.getElementById("home").addEventListener("click", () => {
-    const url = "https://fahim618900-wq.github.io/navid/";
-    tabs[activeTab].url = url;
-    tabbar.children[activeTab].textContent = "Home";
-    window.open(url, "_blank");
-});
-document.getElementById("newtab").addEventListener("click", () => createTab());
-
-// Initialize first tab
-createTab();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
