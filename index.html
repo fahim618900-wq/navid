@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini Web Browser</title>
+<title>Mini Web Browser with Tabs</title>
 <style>
 body {
     margin: 0;
@@ -27,6 +27,26 @@ body {
     width: 30px;
     height: 30px;
     padding: 0;
+}
+.tabs {
+    display: flex;
+    background-color: #ddd;
+    border-bottom: 1px solid #aaa;
+}
+.tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    user-select: none;
+    border-right: 1px solid #aaa;
+}
+.tab.active {
+    background-color: #fff;
+    font-weight: bold;
+}
+iframe#browser {
+    width: 100%;
+    height: calc(100vh - 70px);
+    border: none;
 }
 svg {
     width: 20px;
@@ -60,36 +80,65 @@ svg {
     </button>
 </div>
 
+<div class="tabs" id="tabbar"></div>
+<iframe id="browser" src=""></iframe>
+
 <script>
+const tabbar = document.getElementById("tabbar");
+const iframe = document.getElementById("browser");
 const urlInput = document.getElementById("url");
 
+let tabs = [];
+let activeTab = 0;
+
+// Functions
+function createTab(url = "https://duckduckgo.com") {
+    const index = tabs.length;
+    tabs.push({ url });
+
+    const tabElement = document.createElement("div");
+    tabElement.className = "tab";
+    tabElement.textContent = "New Tab";
+    tabElement.onclick = () => switchTab(index);
+    tabbar.appendChild(tabElement);
+
+    switchTab(index);
+}
+
+function switchTab(index) {
+    activeTab = index;
+    tabs.forEach((t,i) => {
+        tabbar.children[i].classList.toggle("active", i===index);
+    });
+    iframe.src = tabs[index].url;
+    urlInput.value = tabs[index].url;
+}
+
+function updateActiveTabUrl(url) {
+    tabs[activeTab].url = url;
+    tabbar.children[activeTab].textContent = url.replace(/^https?:\/\//,"");
+}
+
+// Event listeners
 document.getElementById("go").addEventListener("click", () => {
     let url = urlInput.value.trim();
     if (!url.startsWith("http")) url = "https://" + url;
-    window.location.href = url;
+    updateActiveTabUrl(url);
+    iframe.src = url;
 });
 
-document.getElementById("back").addEventListener("click", () => {
-    history.back();
-});
-
-document.getElementById("forward").addEventListener("click", () => {
-    history.forward();
-});
-
-document.getElementById("reload").addEventListener("click", () => {
-    location.reload();
-});
-
+document.getElementById("back").addEventListener("click", () => { try { iframe.contentWindow.history.back(); } catch(e){} });
+document.getElementById("forward").addEventListener("click", () => { try { iframe.contentWindow.history.forward(); } catch(e){} });
+document.getElementById("reload").addEventListener("click", () => { try { iframe.contentWindow.location.reload(); } catch(e){ iframe.src = iframe.src; } });
 document.getElementById("home").addEventListener("click", () => {
-    window.location.href = "https://fahim618900-wq.github.io/navid/";
+    let url = "https://fahim618900-wq.github.io/navid/";
+    updateActiveTabUrl(url);
+    iframe.src = url;
 });
+document.getElementById("newtab").addEventListener("click", () => createTab());
 
-document.getElementById("newtab").addEventListener("click", () => {
-    let url = urlInput.value.trim() || "https://duckduckgo.com";
-    if (!url.startsWith("http")) url = "https://" + url;
-    window.open(url, "_blank");
-});
+// Initialize first tab
+createTab();
 </script>
 
 </body>
